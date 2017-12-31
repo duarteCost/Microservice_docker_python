@@ -1,0 +1,16 @@
+version: '3'
+services:
+  user:
+    build: .
+    container_name: user_service
+    ports:
+      - "5000:5000"
+    depends_on:
+     - user_mongo
+  user_mongo:
+    image: mongo:3.4.0
+
+networks:
+  default:
+    external:
+      name: mynet

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service Auth{
+    rpc create_auth_token(UserId) returns(AuthToken){}
+
+    rpc read_auth_token(GeneratedAuthToken) returns(Payload){}
+}
+
+// The request message containing the user's id.
+message UserId {
+  string value = 1;
+}
+
+// The response message containing the auth_token.
+message AuthToken {
+  string value = 1;
+}
+
+// The request message containing the auth_token.
+message GeneratedAuthToken {
+  string value = 1;
+}
+
+// The response message containing the payload.
+message Payload {
+  string value = 1;
+}

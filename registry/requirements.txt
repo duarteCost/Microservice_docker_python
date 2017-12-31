@@ -1,0 +1,6 @@
+flask
+flask-cors
+bson
+pika
+pymongo
+mongoengine

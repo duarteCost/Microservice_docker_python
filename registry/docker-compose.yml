@@ -1,0 +1,15 @@
+version: '3'
+services:
+  registry:
+    build: .
+    container_name: registry_service
+    ports:
+      - "4444:4444"
+    depends_on:
+     - registry_mongo
+  registry_mongo:
+    image: mongo:3.4.0
+networks:
+  default:
+    external:
+      name: mynet
