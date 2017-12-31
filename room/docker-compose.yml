@@ -1,0 +1,15 @@
+version: '3'
+services:
+  room:
+    build: .
+    container_name: room_service
+    ports:
+      - "5004:5004"
+    depends_on:
+     - room_mongo
+  room_mongo:
+    image: mongo:3.4.0
+networks:
+  default:
+    external:
+      name: mynet

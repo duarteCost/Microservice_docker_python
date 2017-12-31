@@ -1,0 +1,23 @@
+version: '3'
+services:
+  booking:
+    build: .
+    container_name: booking_service
+#    deploy:
+#      replicas: 2
+#      resources:
+#        limits:
+#          cpus: "0.1"
+#          memory: 50M
+#      restart_policy:
+#        condition: on-failure
+    ports:
+      - "5003:5003"
+    depends_on:
+     - booking_mongo
+  booking_mongo:
+    image: mongo:3.4.0
+networks:
+  default:
+    external:
+      name: mynet

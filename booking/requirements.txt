@@ -1,0 +1,9 @@
+flask
+flask_cors
+Werkzeug
+pika
+bson
+pymongo
+mongoengine
+grpcio == 1.7.0
+grpcio-tools == 1.7.0
