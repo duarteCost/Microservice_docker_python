@@ -12,6 +12,13 @@ import json
 from auth import AuthService
 
 
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+SELF_IP = config['DEFAULT']['SELF_IP']
+RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
+
+
 class AuthServicer(auth_pb2_grpc.AuthServicer):
     def read_auth_token(self, request, context):
         response = auth_pb2.AuthToken()  # message expected = AuthToken --see auth.proto
@@ -27,13 +34,13 @@ class AuthServicer(auth_pb2_grpc.AuthServicer):
 
 
 class AuthRegister:
-    def __init__(self, username="rabbituser", password="rabbituser", host='192.168.1.4', port='50052'):
+    def __init__(self, username="rabbituser", password="rabbituser", host=RABBIT_HOST_IP, port='50052'):
         self.credentials = pika.PlainCredentials(username, password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host, 5672, '/', self.credentials))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = '192.168.1.6'
+        self.host = SELF_IP
         self.port = port
 
     def register(self):

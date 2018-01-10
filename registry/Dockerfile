@@ -4,7 +4,7 @@ FROM python:3.6.3
 # set working directory
 WORKDIR /app
 
-ADD *.py requirements.txt /app/
+ADD *.py requirements.txt config.json /app/
 
 # install requirements
 RUN pip install --trusted-host pypi.python.org -r requirements.txt

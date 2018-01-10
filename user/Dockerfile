@@ -5,7 +5,7 @@ FROM python:3.6.3
 WORKDIR /app
 
 # add requirements (to leverage Docker cache)
-ADD *.py requirements.txt /app/
+ADD *.py requirements.txt config.json /app/
 
 # install requirements
 RUN pip install --trusted-host pypi.python.org -r requirements.txt

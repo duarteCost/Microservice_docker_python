@@ -21,6 +21,7 @@ with open('config.json', 'r') as f:
 SELF_IP = config['DEFAULT']['SELF_IP']
 RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
 AUTH_IP = config['DEFAULT']['AUTH_IP']
+BOOKING_IP = config['DEFAULT']['BOOKING_IP']
 
 #register
 
@@ -72,7 +73,7 @@ def get_room_by_floor(floor):
     payload = auth_client.rpc_run_read(token)
     error_message = 'Invalid token'
     if payload.value != error_message:
-        response =  requests.get('http://booking_service:5003/bookings', headers={'authorization':token}).content
+        response =  requests.get('http://BOOKING_IP:5003/bookings', headers={'authorization':token}).content
         startTime = request.headers.get('startTime')
         endTime = request.headers.get('endTime')
         timestamp_startTime = time.mktime(datetime.datetime.strptime(startTime, "%Y-%m-%dT%H:%M").timetuple())
