@@ -1,5 +1,5 @@
 import threading
-
+import json
 import mongoengine
 import os
 import pika
@@ -12,6 +12,10 @@ from pymongo import MongoClient, errors
 
 from registry_model import Registry
 
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
 
 def callback(ch, method, properties, body):
     print("[x] Received %r " % body)
@@ -30,7 +34,7 @@ def callback(ch, method, properties, body):
 
 
 class RegistryListener:
-    def __init__(self, username="rabbituser", password="rabbituser", host='192.168.1.6'):
+    def __init__(self, username="rabbituser", password="rabbituser", host=RABBIT_HOST_IP):
         self.credentials = pika.PlainCredentials(username, password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host, 5672, '/', self.credentials))
         self.channel = self.connection.channel()

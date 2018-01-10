@@ -15,17 +15,23 @@ from pymongo import MongoClient, errors
 import auth_client
 from room_model import Room
 
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+SELF_IP = config['DEFAULT']['SELF_IP']
+RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
+AUTH_IP = config['DEFAULT']['AUTH_IP']
 
 #register
 
 class RoomRegister:
-    def __init__(self, username="rabbituser", password="rabbituser", host='192.168.1.5', port='5004'):
+    def __init__(self, username="rabbituser", password="rabbituser", host=RABBIT_HOST_IP, port='5004'):
         self.credentials = pika.PlainCredentials(username, password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host, 5672, '/', self.credentials))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = '10.2.205.171'
+        self.host = SELF_IP
         self.port = port
 
     def register(self):
@@ -56,7 +62,7 @@ rooms = MongoClient('room_mongo', 27017).roomsDB.room
 time.sleep(5)  # hack for the mongoDb database to get running
 
 
-auth_client = auth_client.AuthClient()
+auth_client = auth_client.AuthClient(AUTH_IP, 50052)
 room_register = RoomRegister()
 
 

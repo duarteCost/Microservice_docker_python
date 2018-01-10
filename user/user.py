@@ -1,7 +1,6 @@
 import os
 import time
-import socket
-
+import json
 import mongoengine
 import pika
 
@@ -14,14 +13,22 @@ from user_model import User
 from werkzeug.security import check_password_hash
 
 
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+SELF_IP = config['DEFAULT']['SELF_IP']
+RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
+AUTH_IP = config['DEFAULT']['AUTH_IP']
+
+
 class UserRegister:
-    def __init__(self, username="rabbituser", password="rabbituser", host='192.168.1.6', port='5000'):
+    def __init__(self, username="rabbituser", password="rabbituser", host=RABBIT_HOST_IP, port='5000'):
         self.credentials = pika.PlainCredentials(username, password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host, 5672, '/', self.credentials))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = '192.168.1.6'
+        self.host = SELF_IP
         self.port = port
 
     def register(self):
@@ -48,7 +55,7 @@ CORS(app)
 mongodb = MongoClient('user_mongo', 27017).userdb.user
 time.sleep(5)
 
-auth_client = AuthClient('auth_service', 50052)
+auth_client = AuthClient(AUTH_IP, 50052)
 user_register = UserRegister()
 
 

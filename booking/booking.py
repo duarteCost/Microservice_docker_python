@@ -18,24 +18,23 @@ import auth_client
 import grpc
 import sys
 import time
-from concurrent import futures
 
-# from communication import booking_pb2_grpc, booking_pb2
-#sys.path.insert(0, '../communication')
+with open('config.json', 'r') as f:
+    config = json.load(f)
 
+SELF_IP = config['DEFAULT']['SELF_IP']
+RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
+AUTH_IP = config['DEFAULT']['AUTH_IP']
 
-#en server importes
-
-#register
 
 class BookingRegister:
-    def __init__(self, username="rabbituser", password="rabbituser", host='192.168.1.6', port='5003'):
+    def __init__(self, username="rabbituser", password="rabbituser", host=RABBIT_HOST_IP, port='5003'):
         self.credentials = pika.PlainCredentials(username, password)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host, 5672, '/', self.credentials))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = '10.2.205.171'
+        self.host = SELF_IP
         self.port = port
 
     def register(self):
@@ -65,7 +64,7 @@ bookings = MongoClient('booking_mongo', 27017).bookingsDB.bookings
 
 time.sleep(5)  # hack for the mongoDb database to get running
 
-auth_client = auth_client.AuthClient('auth_service', 50052)
+auth_client = auth_client.AuthClient(AUTH_IP, 50052)
 booking_register = BookingRegister()
 #booking class
 
