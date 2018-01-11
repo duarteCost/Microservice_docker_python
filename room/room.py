@@ -18,10 +18,10 @@ from room_model import Room
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-SELF_IP = config['DEFAULT']['SELF_IP']
+SELF_HOST_IP = config['DEFAULT']['SELF_HOST_IP']
 RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
-AUTH_IP = config['DEFAULT']['AUTH_IP']
-BOOKING_IP = config['DEFAULT']['BOOKING_IP']
+AUTH_HOST_IP = config['DEFAULT']['AUTH_HOST_IP']
+BOOKING_HOST_IP = config['DEFAULT']['BOOKING_HOST_IP']
 
 #register
 
@@ -32,7 +32,7 @@ class RoomRegister:
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = SELF_IP
+        self.host = SELF_HOST_IP
         self.port = port
 
     def register(self):
@@ -63,7 +63,7 @@ rooms = MongoClient('room_mongo', 27017).roomsDB.room
 time.sleep(5)  # hack for the mongoDb database to get running
 
 
-auth_client = auth_client.AuthClient(AUTH_IP, 50052)
+auth_client = auth_client.AuthClient(AUTH_HOST_IP, 50052)
 room_register = RoomRegister()
 
 
@@ -73,7 +73,7 @@ def get_room_by_floor(floor):
     payload = auth_client.rpc_run_read(token)
     error_message = 'Invalid token'
     if payload.value != error_message:
-        response =  requests.get('http://BOOKING_IP:5003/bookings', headers={'authorization':token}).content
+        response =  requests.get('http://'+BOOKING_HOST_IP+':5003/bookings', headers={'authorization':token}).content
         startTime = request.headers.get('startTime')
         endTime = request.headers.get('endTime')
         timestamp_startTime = time.mktime(datetime.datetime.strptime(startTime, "%Y-%m-%dT%H:%M").timetuple())

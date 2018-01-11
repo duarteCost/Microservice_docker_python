@@ -22,9 +22,9 @@ import time
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-SELF_IP = config['DEFAULT']['SELF_IP']
+SELF_HOST_IP = config['DEFAULT']['SELF_HOST_IP']
 RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
-AUTH_IP = config['DEFAULT']['AUTH_IP']
+AUTH_HOST_IP = config['DEFAULT']['AUTH_HOST_IP']
 
 
 class BookingRegister:
@@ -34,7 +34,7 @@ class BookingRegister:
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = SELF_IP
+        self.host = SELF_HOST_IP
         self.port = port
 
     def register(self):
@@ -64,7 +64,7 @@ bookings = MongoClient('booking_mongo', 27017).bookingsDB.bookings
 
 time.sleep(5)  # hack for the mongoDb database to get running
 
-auth_client = auth_client.AuthClient(AUTH_IP, 50052)
+auth_client = auth_client.AuthClient(AUTH_HOST_IP, 50052)
 booking_register = BookingRegister()
 #booking class
 

@@ -15,7 +15,7 @@ from auth import AuthService
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-SELF_IP = config['DEFAULT']['SELF_IP']
+SELF_HOST_IP = config['DEFAULT']['SELF_HOST_IP']
 RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
 
 
@@ -40,7 +40,7 @@ class AuthRegister:
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = SELF_IP
+        self.host = SELF_HOST_IP
         self.port = port
 
     def register(self):

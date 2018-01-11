@@ -16,9 +16,9 @@ from werkzeug.security import check_password_hash
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-SELF_IP = config['DEFAULT']['SELF_IP']
+SELF_HOST_IP = config['DEFAULT']['SELF_HOST_IP']
 RABBIT_HOST_IP = config['DEFAULT']['RABBIT_HOST_IP']
-AUTH_IP = config['DEFAULT']['AUTH_IP']
+AUTH_HOST_IP = config['DEFAULT']['AUTH_HOST_IP']
 
 
 class UserRegister:
@@ -28,7 +28,7 @@ class UserRegister:
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='queue', durable=True)
         #self.host = socket.gethostbyname(socket.gethostname())
-        self.host = SELF_IP
+        self.host = SELF_HOST_IP
         self.port = port
 
     def register(self):
@@ -55,7 +55,7 @@ CORS(app)
 mongodb = MongoClient('user_mongo', 27017).userdb.user
 time.sleep(5)
 
-auth_client = AuthClient(AUTH_IP, 50052)
+auth_client = AuthClient(AUTH_HOST_IP, 50052)
 user_register = UserRegister()
 
 
