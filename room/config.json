@@ -2,7 +2,7 @@
   "DEFAULT": {
     "SELF_HOST_IP": "192.168.1.5",
     "RABBIT_HOST_IP": "192.168.1.5",
-    "AUTH_HOST_IP": "192.168.1.5"
+    "AUTH_HOST_IP": "192.168.1.5",
     "BOOKING_HOST_IP": "192.168.1.5"
   }
 }
