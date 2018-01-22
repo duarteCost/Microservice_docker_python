@@ -15,4 +15,6 @@
   </ol>
   <li>For each microservice run <i><b>docker-compose up</i></b>.</li>
 </ol>
+<br>
+<p>The <b>front-end app</b> of this project is available in this account in the repository named <b><i>BookingApp_FrontEnd_HTML</i></b>.</p>
   
